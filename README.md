@@ -1,42 +1,113 @@
-## Resumen del documento
+# Spring Boot - Accessing Data with JPA
 
-El documento es un informe/laboratorio académico sobre el uso de **AWS CLI (Command Line Interface)** para manejar instancias **EC2 en AWS**.
+Este proyecto es un ejemplo práctico de cómo usar **Spring Boot** junto con **Spring Data JPA** y **H2 Database** para crear, almacenar y consultar datos de una entidad sencilla en una base de datos relacional en memoria.
 
-### Puntos principales:
-1. **Configuración inicial**  
-   - Instalación de AWS CLI.  
-   - Uso de `aws configure` para guardar credenciales y región.  
-   - Creación de los archivos de configuración y credenciales.  
+---
 
-2. **Gestión de llaves (KeyPair)**  
-   - Creación de una llave de seguridad (`MyKeyPair.pem`).  
-   - Ajuste de permisos y verificación.  
+## Requisitos
 
-3. **Red y Seguridad**  
-   - Identificación del **VPC por defecto**.  
-   - Creación de un **Security Group**.  
-   - Adición de reglas de acceso (puerto 3389 para RDP, puerto 22 para SSH).  
+- Java 17 o superior
+- Maven 3.5+ (el wrapper `mvnw` está incluido en el proyecto)
+- Un IDE o editor de texto (IntelliJ, VSCode, Spring Tools Suite, Eclipse, etc.)
 
-4. **Instancias EC2**  
-   - Listado de subnets disponibles.  
-   - Obtención de la AMI más reciente de Amazon Linux mediante SSM.  
-   - Lanzamiento de una instancia EC2 (`t2.micro`).  
-   - Revisión de la información de la instancia.  
+---
 
-5. **Conexión y uso**  
-   - Obtención del DNS público.  
-   - Conexión vía SSH a la instancia EC2.  
+## Pasos implementados
 
-6. **Limpieza de recursos**  
-   - Terminación de la instancia.  
-   - Eliminación del Security Group.  
-   - Eliminación de la Key Pair y del archivo `.pem` local.  
+### 1. Configuración inicial
+Se creó un proyecto con [Spring Initializr](https://start.spring.io) con las dependencias:
+- **Spring Data JPA**
+- **H2 Database**
 
-### Conclusión
-El documento muestra paso a paso cómo usar AWS CLI para:
-- Configurar credenciales  
-- Crear llaves y reglas de red  
-- Lanzar y conectarse a una instancia EC2  
-- Eliminar los recursos al final  
+### 2. Entidad `Customer`
+La clase `Customer` representa una entidad con:
+- `id` (clave primaria autogenerada)
+- `firstName`
+- `lastName`
 
-Se trata de un tutorial práctico y documentado para aprender a manejar instancias EC2 desde la línea de comandos, como parte del curso **AREP (Arquitectura Empresarial)**.
+### 3. Repositorio
+Se creó una interfaz `CustomerRepository` que extiende de `CrudRepository` y provee:
+- `save()`, `findAll()`, `delete()`, entre otros métodos.
+- Métodos personalizados como `findByLastName(String lastName)` y `findById(long id)`.
+
+### 4. Clase principal
+La clase `AccessingDataJpaApplication` usa un `CommandLineRunner` que:
+1. Inserta 5 clientes en la base de datos.
+2. Muestra todos los clientes (`findAll()`).
+3. Consulta un cliente por id (`findById(1L)`).
+4. Consulta clientes por apellido (`findByLastName("Bauer")`).
+
+### 5. Configuración de H2
+En `application.properties` se configuró una base de datos H2 en memoria:
+
+```
+properties
+spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=LEGACY
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+spring.h2.console.enabled=true
+logging.level.org.hibernate.SQL=INFO
+```
+
+## Para ejecutar el proyecto
+- En nuestra consola escribimos mvn clean package.
+- Luego escribimos mvn spring-boot:run y daremos enter.
+
+## Para terminar la ejecución
+- Seleccionamos Ctrl + c y daremos enter.
+
+## Estructura del proyecto:
+```
+C:.
+├───.mvn
+│ └───wrapper
+├───src
+│ ├───main
+│ │ ├───java
+│ │ │ └───com
+│ │ │ └───example
+│ │ │ └───accessing_data_jpa
+│ │ └───resources
+│ └───test
+│ └───java
+│ └───com
+│ └───example
+│ └───accessing_data_jpa
+└───target
+├───classes
+│ └───com
+│ └───example
+│ └───accessing_data_jpa
+├───generated-sources
+│ └───annotations
+├───maven-status
+├───surefire-reports
+└───test-classes
+```
+## Imagen de nuestro properties:
+
+![Configuración de properties](src/main/resources/imagenes/properties.png)
+
+## Imagen de la salida:
+![imagen de la salida](src/main/resources/imagenes/salida.png)
+
+
+## Como se veria si lo ejecutamos en nuestro localhost:8080
+
+- En n uestro browser escribimos: http://localhost:8080/h2-console
+
+- Se verá de la siguiente manera:
+![imagen localhost](src/main/resources/imagenes/p1.png)
+
+- Allí colocamos las credenciales:
+JDBC URL: jdbc:h2:mem:testdb
+User Name: sa
+
+- Daremos al boton "Connect" y se vera de la siguiente manera:
+![imagen localhost](src/main/resources/imagenes/p2.png)
+
+- Alli podremos realizar la consulta:
+![imagen localhost](src/main/resources/imagenes/p3.png)
+
