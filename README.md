@@ -56,16 +56,16 @@ logging.level.org.hibernate.SQL=INFO
 - Luego escribimos mvn spring-boot:run y daremos enter.
 
 - vamos a nuestro github y copiamos el link.
-- En nuestra carpeta de confianza escribimos: git clone https://github.com/Ttowers-09/Aws_Cli.git
+- En nuestra carpeta de confianza escribimos: git clone https://github.com/Ttowers-09/Jpa_AwsCli_IvanTorres_Arep.git
 
-- Escribimos cd Aws_Cli para acceder a la carpeta.
+- Escribimos cd Jpa_AwsCli_IvanTorres_Arep para acceder a la carpeta.
 - alli escribimos mvn clean package para generar el .tar
 - Luego escribimos mvn spring-boot:run para la ejecución.
 - Alli nos dirigimos a nuestro localhost (Especificado mas abajo).
 
 
 ## Para visualizar el archivo del proceso de AWS Cli
-- En la carpeta Aws_Cli escribimos cd AWS_CLIS y allí encontraremos el formato.pdf
+- En la carpeta Jpa_AwsCli_IvanTorres_Arep escribimos cd AWS_CLIS y allí encontraremos el formato.pdf
 
 ## Para terminar la ejecución
 - Seleccionamos Ctrl + c y daremos enter.
